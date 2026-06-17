@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Herban Group – Weekly Safety Training</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #1a3a2a;
+    --green-mid: #2d6a4f;
+    --green-light: #52b788;
+    --cream: #f8f6f1;
+    --ink: #1c1c1c;
+    --muted: #6b7c74;
+    --border: #c8d6ce;
+    --field-bg: #ffffff;
+    --section-bg: #f0f4f2;
+  }
+
+  body {
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 80px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .header {
+    background: var(--green-dark);
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-light);
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: #8cb8a4;
+    margin-top: 4px;
+  }
+
+  .form-body {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .section {
+    background: var(--field-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .section-header {
+    background: var(--section-bg);
+    padding: 11px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .row { display: grid; gap: 12px; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+    background: var(--field-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 16px;
+    color: var(--ink);
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--green-light);
+    box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.18);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+  }
+
+  /* TOPICS NOTE */
+  .topics-note {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--section-bg);
+    border-radius: 8px;
+    padding: 10px 12px;
+    line-height: 1.5;
+    border: 1px solid var(--border);
+  }
+
+  /* ATTENDEE ROWS */
+  .attendee-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: end;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eef2f0;
+  }
+
+  .attendee-row:last-child {
+    border-bottom: none;
+  }
+
+  .attendee-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--green-light);
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    border: 1.5px dashed var(--border);
+    background: transparent;
+    color: var(--green-mid);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s;
+  }
+
+  .add-btn:active { background: var(--section-bg); }
+
+  /* SIGNATURE BLOCK */
+  .sig-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .sig-field label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* ACTION BAR */
+  .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+  }
+
+  .btn-primary { background: var(--green-mid); color: white; }
+  .btn-secondary { background: var(--section-bg); color: var(--green-dark); border: 1.5px solid var(--border); }
+
+  @media print {
+    .action-bar { display: none; }
+    .add-btn { display: none; }
+    body { background: white; }
+    .section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-eyebrow">The Herban Group</span>
+  <h1 class="header-title">Weekly Safety Training</h1>
+  <p class="header-sub">Complete all fields before obtaining attendee signatures</p>
+</div>
+
+<div class="form-body">
+
+  <!-- SESSION INFO -->
+  <div class="section">
+    <div class="section-header">Session Information</div>
+    <div class="section-body">
+      <div class="row row-2">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" name="date" id="sessionDate">
+        </div>
+        <div class="field">
+          <label>Number of Persons Attending</label>
+          <input type="number" name="numAttending" id="numAttending" placeholder="0" min="1" readonly>
+        </div>
+      </div>
+      <div class="row row-2">
+        <div class="field">
+          <label>Job Name</label>
+          <input type="text" name="jobName" placeholder="Project / job name">
+        </div>
+        <div class="field">
+          <label>Job #</label>
+          <input type="text" name="jobNumber" placeholder="e.g. 2024-001">
+        </div>
+      </div>
+      <div class="field">
+        <label>Name of Person Conducting Training</label>
+        <input type="text" name="trainer" placeholder="Full name">
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="section">
+    <div class="section-header">Training Topics</div>
+    <div class="section-body">
+      <div class="topics-note">
+        Regular topics include: PPE Requirements, any job-specific topics, incidents, etc.
+      </div>
+      <div class="field">
+        <label>Main Topics Discussed</label>
+        <textarea name="mainTopics" placeholder="List the primary topics covered in this session…"></textarea>
+      </div>
+      <div class="field">
+        <label>Additional Topics Discussed</label>
+        <textarea name="additionalTopics" placeholder="Any supplemental topics addressed…"></textarea>
+      </div>
+      <div class="field">
+        <label>Suggestions Offered</label>
+        <textarea name="suggestions" placeholder="Suggestions raised by attendees or trainer…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAINER SIGNATURE -->
+  <div class="section">
+    <div class="section-header">Person Conducting Training</div>
+    <div class="sig-row">
+      <div class="sig-field">
+        <label>Signature (type full name)</label>
+        <input type="text" name="trainerSig" placeholder="Type full name to sign">
+      </div>
+      <div class="sig-field">
+        <label>Date</label>
+        <input type="date" name="trainerSigDate" id="trainerSigDate">
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTENDEES -->
+  <div class="section">
+    <div class="section-header">Attendee Sign-In</div>
+    <div id="attendeeList">
+      <!-- Rows injected by JS -->
+    </div>
+    <div style="padding: 12px 16px;">
+      <button class="add-btn" type="button" onclick="addAttendee()">+ Add Attendee</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" type="button" onclick="clearForm()">Clear</button>
+  <button class="btn btn-primary" type="button" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<script>
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('sessionDate').value = today;
+  document.getElementById('trainerSigDate').value = today;
+
+  let attendeeCount = 0;
+
+  function addAttendee() {
+    attendeeCount++;
+    const list = document.getElementById('attendeeList');
+    const row = document.createElement('div');
+    row.className = 'attendee-row';
+    row.id = `attendee-${attendeeCount}`;
+    row.innerHTML = `
+      <div class="field">
+        <div class="attendee-num">ATTENDEE ${attendeeCount}</div>
+        <label>Printed Name</label>
+        <input type="text" name="attendee${attendeeCount}Name" placeholder="Full name">
+      </div>
+      <div class="field">
+        <label>Signature (type full name)</label>
+        <input type="text" name="attendee${attendeeCount}Sig" placeholder="Type full name to sign">
+      </div>
+    `;
+    list.appendChild(row);
+    updateCount();
+
+    // Focus the new name field
+    row.querySelector('input').focus();
+  }
+
+  function updateCount() {
+    document.getElementById('numAttending').value = attendeeCount || '';
+  }
+
+  function clearForm() {
+    if (confirm('Clear all form data?')) {
+      document.querySelectorAll('input[type="text"], textarea, input[type="number"]').forEach(el => {
+        if (el.id !== 'numAttending') el.value = '';
+      });
+      document.getElementById('sessionDate').value = today;
+      document.getElementById('trainerSigDate').value = today;
+      document.getElementById('attendeeList').innerHTML = '';
+      attendeeCount = 0;
+      updateCount();
+    }
+  }
+
+  // Start with 8 attendee rows (matching the original form)
+  for (let i = 0; i < 8; i++) addAttendee();
+</script>
+</body>
+</html>

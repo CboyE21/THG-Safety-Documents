@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Herban Group – Incident Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #1a3a2a;
+    --green-mid: #2d6a4f;
+    --green-light: #52b788;
+    --cream: #f8f6f1;
+    --ink: #1c1c1c;
+    --muted: #6b7c74;
+    --border: #c8d6ce;
+    --red: #c0392b;
+    --field-bg: #ffffff;
+    --section-bg: #f0f4f2;
+  }
+
+  body {
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 60px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--green-dark);
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-light);
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: #8cb8a4;
+    margin-top: 4px;
+  }
+
+  /* FORM */
+  .form-body {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .section {
+    background: var(--field-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .section-header {
+    background: var(--section-bg);
+    padding: 11px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .row {
+    display: grid;
+    gap: 12px;
+  }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--field-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 16px; /* 16px prevents iOS zoom */
+    color: var(--ink);
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--green-light);
+    box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.18);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+  }
+
+  /* RADIO / YES-NO */
+  .yesno {
+    display: flex;
+    gap: 10px;
+  }
+
+  .yesno-option {
+    flex: 1;
+    position: relative;
+  }
+
+  .yesno-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .yesno-option label {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--muted);
+    background: var(--field-bg);
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .yesno-option input[type="radio"]:checked + label {
+    border-color: var(--green-mid);
+    background: #e8f4ee;
+    color: var(--green-dark);
+  }
+
+  .yesno-option.yes input[type="radio"]:checked + label {
+    border-color: var(--green-mid);
+    background: #e8f4ee;
+    color: var(--green-dark);
+  }
+
+  .yesno-option.no input[type="radio"]:checked + label {
+    border-color: var(--red);
+    background: #fdecea;
+    color: var(--red);
+  }
+
+  /* TRISTATE YES/NO/N-A */
+  .tristate {
+    display: flex;
+    gap: 8px;
+  }
+
+  .tristate-option {
+    flex: 1;
+    position: relative;
+  }
+
+  .tristate-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .tristate-option label {
+    display: block;
+    text-align: center;
+    padding: 10px 6px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--muted);
+    background: var(--field-bg);
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .field-label-full {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 2px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2px 0;
+  }
+
+  /* SIGNATURE BLOCK */
+  .sig-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .sig-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  /* SUBMIT */
+  .action-bar {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    gap: 10px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+  }
+
+  .btn-primary {
+    background: var(--green-mid);
+    color: white;
+  }
+
+  .btn-secondary {
+    background: var(--section-bg);
+    color: var(--green-dark);
+    border: 1.5px solid var(--border);
+  }
+
+  .required-star { color: var(--red); margin-left: 2px; }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7c74' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .print-note {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    padding: 0 16px;
+    margin-top: -8px;
+  }
+
+  @media print {
+    .action-bar { display: none; }
+    body { background: white; }
+    .section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-eyebrow">The Herban Group</span>
+  <h1 class="header-title">Company Report of Accident</h1>
+  <p class="header-sub">For use in conjunction with OSHA 301 Form</p>
+</div>
+
+<form class="form-body" id="incidentForm" onsubmit="handleSubmit(event)">
+
+  <!-- INCIDENT INFO -->
+  <div class="section">
+    <div class="section-header">Incident Information</div>
+    <div class="section-body">
+      <div class="row row-2">
+        <div class="field">
+          <label>Job Site <span class="required-star">*</span></label>
+          <input type="text" name="jobSite" placeholder="Site name or address" required>
+        </div>
+        <div class="field">
+          <label>Job Site Number</label>
+          <input type="text" name="jobSiteNumber" placeholder="e.g. 2024-001">
+        </div>
+      </div>
+      <div class="field">
+        <label>Date of Injury <span class="required-star">*</span></label>
+        <input type="date" name="dateOfInjury" required>
+      </div>
+    </div>
+  </div>
+
+  <!-- INJURED EMPLOYEE -->
+  <div class="section">
+    <div class="section-header">Injured Employee</div>
+    <div class="section-body">
+      <div class="row row-2">
+        <div class="field">
+          <label>Name of Injured <span class="required-star">*</span></label>
+          <input type="text" name="injuredName" placeholder="Full name" required>
+        </div>
+        <div class="field">
+          <label>Age</label>
+          <input type="number" name="age" placeholder="Age" min="14" max="100">
+        </div>
+      </div>
+      <div class="row row-2">
+        <div class="field">
+          <label>Employed By</label>
+          <input type="text" name="employedBy" placeholder="Employer name">
+        </div>
+        <div class="field">
+          <label>Occupation</label>
+          <input type="text" name="occupation" placeholder="Job title / trade">
+        </div>
+      </div>
+      <div class="field">
+        <label>Last 4 of SSN</label>
+        <input type="text" name="ssn4" placeholder="XXXX" maxlength="4" pattern="\d{4}" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label>Drug / Alcohol Test Performed?</label>
+        <div class="yesno" id="drugTestGroup">
+          <div class="yesno-option yes">
+            <input type="radio" name="drugTest" id="drugYes" value="yes">
+            <label for="drugYes">✓ Yes</label>
+          </div>
+          <div class="yesno-option no">
+            <input type="radio" name="drugTest" id="drugNo" value="no">
+            <label for="drugNo">✗ No</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div class="section">
+    <div class="section-header">Description of Occurrence</div>
+    <div class="section-body">
+      <div class="field">
+        <label>Include location, time of day, related details, and resulting injuries <span class="required-star">*</span></label>
+        <textarea name="description" placeholder="Describe what happened, where, when, and what injuries resulted…" required rows="5"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- WITNESS -->
+  <div class="section">
+    <div class="section-header">Witness Information</div>
+    <div class="section-body">
+      <div class="row row-2">
+        <div class="field">
+          <label>Witness Name</label>
+          <input type="text" name="witnessName" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label>Employed By</label>
+          <input type="text" name="witnessEmployer" placeholder="Employer name">
+        </div>
+      </div>
+      <div class="field">
+        <label>Drug / Alcohol Test?</label>
+        <div class="yesno">
+          <div class="yesno-option yes">
+            <input type="radio" name="witnessDrugTest" id="wDrugYes" value="yes">
+            <label for="wDrugYes">✓ Yes</label>
+          </div>
+          <div class="yesno-option no">
+            <input type="radio" name="witnessDrugTest" id="wDrugNo" value="no">
+            <label for="wDrugNo">✗ No</label>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Comments</label>
+        <textarea name="witnessComments" placeholder="Witness statement or observations…" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOLLOW-UP -->
+  <div class="section">
+    <div class="section-header">Investigation & Corrective Action</div>
+    <div class="section-body">
+      <div class="field">
+        <label>Did any unsafe conditions exist?</label>
+        <div class="yesno">
+          <div class="yesno-option yes">
+            <input type="radio" name="unsafeConditions" id="ucYes" value="yes">
+            <label for="ucYes">✓ Yes</label>
+          </div>
+          <div class="yesno-option no">
+            <input type="radio" name="unsafeConditions" id="ucNo" value="no">
+            <label for="ucNo">✗ No</label>
+          </div>
+        </div>
+      </div>
+      <div class="field" id="unsafeDetails" style="display:none">
+        <label>Describe unsafe conditions</label>
+        <textarea name="unsafeDetails" placeholder="Describe the unsafe conditions…" rows="3"></textarea>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Did the employee contribute to the accident?</label>
+        <div class="yesno">
+          <div class="yesno-option yes">
+            <input type="radio" name="employeeContrib" id="ecYes" value="yes">
+            <label for="ecYes">✓ Yes</label>
+          </div>
+          <div class="yesno-option no">
+            <input type="radio" name="employeeContrib" id="ecNo" value="no">
+            <label for="ecNo">✗ No</label>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label>Corrective Action Taken</label>
+        <textarea name="correctiveAction" placeholder="Describe corrective actions taken or planned…" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNATURES -->
+  <div class="section">
+    <div class="section-header">Signatures</div>
+    <div class="section-body">
+      <div class="sig-block">
+        <div class="sig-field">
+          <label>Supervisor Name</label>
+          <input type="text" name="supervisorName" placeholder="Print name">
+        </div>
+        <div class="sig-field">
+          <label>Date Signed</label>
+          <input type="date" name="supervisorDate">
+        </div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-field">
+          <label>Employee Signature</label>
+          <input type="text" name="employeeSignature" placeholder="Type full name to sign">
+        </div>
+        <div class="sig-field">
+          <label>Date Signed</label>
+          <input type="date" name="employeeDate">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<p class="print-note">Tap "Print / Save PDF" to generate a copy for your records.</p>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" type="button" onclick="clearForm()">Clear Form</button>
+  <button class="btn btn-primary" type="button" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<script>
+  // Show unsafe condition details when "Yes" selected
+  document.querySelectorAll('input[name="unsafeConditions"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const details = document.getElementById('unsafeDetails');
+      details.style.display = this.value === 'yes' ? 'flex' : 'none';
+    });
+  });
+
+  // Set today's date on date fields that are empty
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelector('input[name="dateOfInjury"]').value = today;
+  document.querySelector('input[name="supervisorDate"]').value = today;
+  document.querySelector('input[name="employeeDate"]').value = today;
+
+  function clearForm() {
+    if (confirm('Clear all form data?')) {
+      document.getElementById('incidentForm').reset();
+      document.getElementById('unsafeDetails').style.display = 'none';
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    window.print();
+  }
+</script>
+</body>
+</html>

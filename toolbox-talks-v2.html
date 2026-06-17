@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Herban Group – Toolbox Talks</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #1a3a2a;
+    --green-mid: #2d6a4f;
+    --green-light: #52b788;
+    --cream: #f8f6f1;
+    --ink: #1c1c1c;
+    --muted: #6b7c74;
+    --border: #c8d6ce;
+    --field-bg: #ffffff;
+    --section-bg: #f0f4f2;
+    --red: #c0392b;
+  }
+
+  body {
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 90px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .header {
+    background: var(--green-dark);
+    padding: 28px 24px 20px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 4px;
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: #8cb8a4;
+    margin-top: 4px;
+  }
+
+  .form-body {
+    padding: 16px;
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .section {
+    background: var(--field-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .section-header {
+    background: var(--section-bg);
+    padding: 11px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--field-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 16px;
+    color: var(--ink);
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--green-light);
+    box-shadow: 0 0 0 3px rgba(82,183,136,0.18);
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7c74' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* TALK CARDS IN LIBRARY */
+  .talk-card {
+    background: var(--field-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .talk-card-header {
+    background: var(--section-bg);
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .talk-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    white-space: nowrap;
+  }
+
+  .talk-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+
+  .talk-cat {
+    margin-left: auto;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: #dde9e3;
+    color: var(--green-mid);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .talk-body {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .talk-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-mid);
+    margin-top: 4px;
+  }
+
+  .talk-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .talk-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .talk-points li {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .talk-points li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    color: var(--green-light);
+    font-weight: 700;
+  }
+
+  .discussion-box {
+    background: #eaf4ef;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--green-dark);
+    border: 1px solid #c2ddd0;
+  }
+
+  .discussion-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-mid);
+    margin-bottom: 3px;
+  }
+
+  /* ATTENDEE ROWS */
+  .attendee-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eef2f0;
+    align-items: end;
+  }
+  .attendee-row:last-child { border-bottom: none; }
+
+  .attendee-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--green-light);
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  /* CATEGORY LABEL */
+  .cat-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 6px 4px 2px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+
+  /* ACTION BAR */
+  .action-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-primary { background: var(--green-mid); color: white; }
+  .btn-secondary { background: var(--section-bg); color: var(--green-dark); border: 1.5px solid var(--border); }
+
+  .page-break { display: none; }
+
+  @media print {
+    .action-bar { display: none; }
+    body { background: white; }
+    .section, .talk-card { break-inside: avoid; }
+    .page-break { display: block; break-before: page; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">The Herban Group</div>
+  <h1 class="header-title">Toolbox Talk</h1>
+  <p class="header-sub">Daily safety training &amp; sign-in form</p>
+</div>
+
+<div class="form-body">
+
+  <!-- SESSION INFO -->
+  <div class="section">
+    <div class="section-header">Session Info</div>
+    <div class="section-body">
+      <div class="row-2">
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="formDate">
+        </div>
+        <div class="field">
+          <label>Job Name</label>
+          <input type="text" placeholder="Project name">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Job #</label>
+          <input type="text" placeholder="e.g. 2024-001">
+        </div>
+        <div class="field">
+          <label>Supervisor</label>
+          <input type="text" placeholder="Full name">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPIC SELECTOR -->
+  <div class="section">
+    <div class="section-header">Select Today's Topic</div>
+    <div class="section-body">
+      <div class="field">
+        <label>Toolbox Talk Topic</label>
+        <select>
+          <option value="">— Choose a topic —</option>
+          <optgroup label="PPE">
+            <option>1 — Respiratory Protection for Drywall Dust</option>
+            <option>2 — Eye Protection on the Job</option>
+            <option>3 — Glove Selection for Painting &amp; Insulation Work</option>
+          </optgroup>
+          <optgroup label="Drywall">
+            <option>4 — Safe Handling &amp; Lifting of Drywall Sheets</option>
+            <option>5 — Cutting Drywall Safely</option>
+            <option>6 — Silica Dust Awareness</option>
+          </optgroup>
+          <optgroup label="Painting">
+            <option>7 — Paint &amp; Solvent Safety</option>
+            <option>8 — Spray Painting Safety</option>
+            <option>9 — Ladder Safety for Painters</option>
+          </optgroup>
+          <optgroup label="Insulation">
+            <option>10 — Fiberglass Insulation Safety</option>
+            <option>11 — Spray Foam Insulation Hazards</option>
+          </optgroup>
+          <optgroup label="Fall Protection">
+            <option>12 — Scaffold Safety</option>
+            <option>13 — Floor &amp; Wall Opening Hazards</option>
+          </optgroup>
+          <optgroup label="Tools &amp; Equipment">
+            <option>14 — Electrical Safety &amp; GFCI Protection</option>
+          </optgroup>
+          <optgroup label="Health &amp; Wellness">
+            <option>15 — Heat Illness Prevention</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Additional Notes / Discussion</label>
+        <textarea placeholder="Any extra points discussed on site today…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTENDEE SIGN-IN -->
+  <div class="section">
+    <div class="section-header">Attendee Sign-In</div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 1</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 2</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 3</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 4</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 5</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 6</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 7</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+    <div class="attendee-row"><div class="field"><div class="attendee-num">ATTENDEE 8</div><label>Printed Name</label><input type="text" placeholder="Full name"></div><div class="field"><label>Signature (type full name)</label><input type="text" placeholder="Type full name to sign"></div></div>
+  </div>
+
+  <!-- SUPERVISOR SIGNATURE -->
+  <div class="section">
+    <div class="section-header">Supervisor Signature</div>
+    <div class="section-body">
+      <div class="row-2">
+        <div class="field">
+          <label>Signature (type full name)</label>
+          <input type="text" placeholder="Type full name to sign">
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="supSigDate">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGE BREAK FOR PRINT ── -->
+  <div class="page-break"></div>
+
+  <!-- TALK LIBRARY -->
+  <div class="section">
+    <div class="section-header">Talk Library — Reference Guide</div>
+    <div class="section-body" style="gap:20px;">
+
+      <div class="cat-label">PPE</div>
+
+      <!-- TALK 1 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #1</span>
+          <span class="talk-title">Respiratory Protection for Drywall Dust</span>
+          <span class="talk-cat">PPE</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Drywall sanding produces fine silica and gypsum dust that can cause serious lung disease over time. Proper respiratory protection is essential every time you sand.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Always wear at minimum an N95 respirator when sanding drywall or joint compound.</li>
+            <li>Fit-test your respirator — a loose mask provides little protection.</li>
+            <li>Disposable respirators must be discarded when breathing becomes difficult or the mask is damaged.</li>
+            <li>If sanding in a confined or poorly ventilated space, upgrade to a half-face respirator with P100 filters.</li>
+            <li>Never eat, drink, or smoke in dusty work areas — wash your hands and face before breaks.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Have you checked your respirator fit today? Are there adequate supplies on site?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 2 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #2</span>
+          <span class="talk-title">Eye Protection on the Job</span>
+          <span class="talk-cat">PPE</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Eye injuries are among the most common construction injuries and are almost entirely preventable with proper PPE.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Safety glasses must be worn when cutting, sanding, spraying, or mixing materials.</li>
+            <li>Use goggles or a face shield when spraying paint, texture, or applying chemicals.</li>
+            <li>Prescription glasses alone do not meet ANSI Z87.1 safety standards.</li>
+            <li>Inspect safety glasses daily for scratches or cracks that reduce visibility.</li>
+            <li>Know the location of the eyewash station or emergency water source on site.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Where is the nearest eyewash station? Does everyone have proper eye protection for today's tasks?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 3 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #3</span>
+          <span class="talk-title">Glove Selection for Painting &amp; Insulation Work</span>
+          <span class="talk-cat">PPE</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Different tasks require different gloves. Using the wrong glove — or no glove — can result in chemical burns, cuts, or skin sensitization.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Use nitrile gloves when handling paints, solvents, primers, or adhesives.</li>
+            <li>Wear cut-resistant gloves when cutting drywall, mesh tape, or insulation batts.</li>
+            <li>Heavy-duty work gloves protect against abrasion when handling metal studs or fiber insulation.</li>
+            <li>Never use latex gloves near solvents — they offer minimal chemical resistance.</li>
+            <li>Replace gloves immediately if they are torn or contaminated on the inside.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Does everyone have the right gloves for today's specific tasks?
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-label">Drywall</div>
+
+      <!-- TALK 4 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #4</span>
+          <span class="talk-title">Safe Handling &amp; Lifting of Drywall Sheets</span>
+          <span class="talk-cat">Drywall</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">A single 4x8 sheet of 5/8" drywall weighs over 70 lbs. Back injuries from improper lifting are one of the top causes of lost work time in our trade.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Always lift with your legs, not your back — bend at the knees and keep your back straight.</li>
+            <li>Use a drywall cart or panel lift for moving multiple sheets.</li>
+            <li>Two-person lifts are required for sheets 4x12 and larger.</li>
+            <li>Panel lifts must be inspected before use — check wheels, clamps, and the lift mechanism.</li>
+            <li>Carry sheets on edge, not flat, to reduce stress on the sheet and your body.</li>
+            <li>Clear the path before moving large panels — trip hazards are especially dangerous when vision is obstructed.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Do we have enough carts and lifts for today's scope? Who are the two-person lift partners?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 5 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #5</span>
+          <span class="talk-title">Cutting Drywall Safely</span>
+          <span class="talk-cat">Drywall</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Drywall knives and routers are sharp tools used constantly on our jobs. Cuts and lacerations are preventable with the right habits.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Always cut away from your body and keep fingers clear of the cut line.</li>
+            <li>Retract utility knife blades when not in use — never leave an exposed blade on a surface.</li>
+            <li>Change blades regularly — dull blades require more force and are more likely to slip.</li>
+            <li>Use a straightedge or T-square to guide cuts instead of freehand cutting.</li>
+            <li>When using a drywall router, secure the panel before cutting and keep cords clear of the cutting path.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Are all cutting tools in good condition today? Have blades been changed recently?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 6 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #6</span>
+          <span class="talk-title">Silica Dust Awareness</span>
+          <span class="talk-cat">Drywall</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Silica is found in drywall compound and can cause silicosis — a permanent, potentially fatal lung disease. OSHA has strict standards for silica exposure.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Use wet methods or vacuum-equipped tools when sanding where feasible.</li>
+            <li>Wear an N95 or higher respirator any time dry sanding is performed.</li>
+            <li>Avoid blowing dust with compressed air — this creates high airborne silica concentrations.</li>
+            <li>Ventilate work areas and use plastic sheeting to contain dust to the work zone.</li>
+            <li>Clean up with a wet mop or HEPA vacuum — never dry sweep silica-containing dust.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Is wet sanding or vacuum sanding feasible for any of today's tasks?
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-label">Painting</div>
+
+      <!-- TALK 7 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #7</span>
+          <span class="talk-title">Paint &amp; Solvent Safety</span>
+          <span class="talk-cat">Painting</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Paints, primers, and solvents contain chemicals that can be harmful if inhaled, ingested, or absorbed through the skin. Always review the SDS before using a new product.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Know where the SDS binder is kept on every job site.</li>
+            <li>Check the SDS for the correct PPE — respirator type, glove material, and eye protection.</li>
+            <li>Store flammable solvents in approved containers away from ignition sources.</li>
+            <li>Never mix paint products unless specifically directed — chemical reactions can produce toxic fumes.</li>
+            <li>Dispose of solvent-soaked rags in an approved metal safety can to prevent spontaneous combustion.</li>
+            <li>Report any symptoms of dizziness, headache, or nausea when working with solvents immediately.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Where is the SDS book on this site? Has everyone reviewed the SDS for today's products?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 8 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #8</span>
+          <span class="talk-title">Spray Painting Safety</span>
+          <span class="talk-cat">Painting</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Airless sprayers operate at extremely high pressure and can inject paint through skin, causing serious injury. Spray painting also creates heavy airborne mist and requires full PPE.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Never point an airless sprayer at any person — even without the tip installed, pressure can injure.</li>
+            <li>Always engage the safety lock when not actively spraying.</li>
+            <li>Wear a supplied-air respirator or N95 minimum when spraying in enclosed areas.</li>
+            <li>Wear chemical splash goggles — not just safety glasses — when spraying.</li>
+            <li>Ground the sprayer properly to prevent static buildup when spraying flammable coatings.</li>
+            <li>Ensure adequate ventilation — open windows, run exhaust fans, or use blowers.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Is ventilation adequate for today's spraying operations? Is the sprayer pressure properly set?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 9 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #9</span>
+          <span class="talk-title">Ladder Safety for Painters</span>
+          <span class="talk-cat">Painting</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Painters spend a significant part of their workday on ladders. Falls from ladders are one of the leading causes of fatalities in construction.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Inspect every ladder before use — look for cracks, bent rungs, and missing feet.</li>
+            <li>Set extension ladders at a 4:1 angle — 1 foot out for every 4 feet of height.</li>
+            <li>Always maintain three points of contact when climbing.</li>
+            <li>Never carry a paint bucket or sprayer with both hands while climbing — use a hook or bucket hanger.</li>
+            <li>Do not stand on the top two rungs of a stepladder or the top three rungs of an extension ladder.</li>
+            <li>Secure the top and bottom of extension ladders on slippery or uneven surfaces.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Are all ladders on site inspected and in good condition? Are they the correct height for today's tasks?
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-label">Insulation</div>
+
+      <!-- TALK 10 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #10</span>
+          <span class="talk-title">Fiberglass Insulation Safety</span>
+          <span class="talk-cat">Insulation</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Fiberglass insulation contains tiny glass fibers that can irritate skin, eyes, and the respiratory tract. Proper PPE makes handling insulation comfortable and safe.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Wear long sleeves and long pants — skin exposure causes itching and irritation.</li>
+            <li>Wear safety glasses or goggles to prevent fiber contact with eyes.</li>
+            <li>Wear an N95 respirator when handling or cutting fiberglass batts.</li>
+            <li>Wash exposed skin with cool water after contact — hot water opens pores and traps fibers.</li>
+            <li>Change and wash work clothing before leaving the job site to avoid bringing fibers home.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Does everyone have the right PPE for insulation work today? Are long sleeves and gloves available?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 11 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #11</span>
+          <span class="talk-title">Spray Foam Insulation Hazards</span>
+          <span class="talk-cat">Insulation</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Two-component spray polyurethane foam contains isocyanates — chemicals that can cause permanent respiratory sensitization and asthma. Once sensitized, re-exposure can be life-threatening.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Only trained workers should apply two-component spray foam.</li>
+            <li>A supplied-air respirator (SAR) is required during application — not just an N95.</li>
+            <li>The work area must be evacuated and ventilated during and after application.</li>
+            <li>Wear full chemical-resistant coveralls, gloves, and goggles when handling components.</li>
+            <li>Skin contact with uncured foam can cause chemical burns — wash off immediately.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Is the spray foam area properly evacuated and ventilated? Do applicators have supplied-air respirators?
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-label">Fall Protection</div>
+
+      <!-- TALK 12 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #12</span>
+          <span class="talk-title">Scaffold Safety</span>
+          <span class="talk-cat">Fall Protection</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Scaffolding is used frequently for ceiling work, high walls, and exterior applications. Scaffold-related falls are fatal. Never take shortcuts with scaffold safety.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Only competent persons may erect, move, or dismantle scaffolding.</li>
+            <li>Inspect the scaffold at the start of each shift — look for missing guardrails, cross-braces, and damaged planks.</li>
+            <li>All scaffold platforms must be fully planked — no gaps where a worker or tool can fall through.</li>
+            <li>Guardrails must be in place on all open sides and ends above 10 feet.</li>
+            <li>Never overload scaffolding — know the rated capacity and stay within it.</li>
+            <li>Keep the scaffold clear of debris, tools, and cords that could cause a trip.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Has today's scaffolding been inspected? Who is our designated competent person for scaffolding?
+          </div>
+        </div>
+      </div>
+
+      <!-- TALK 13 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #13</span>
+          <span class="talk-title">Floor &amp; Wall Opening Hazards</span>
+          <span class="talk-cat">Fall Protection</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Open holes in floors and walls are common during construction. An unguarded opening is an immediate fall hazard that must be addressed before work begins.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>All floor openings must be covered or guarded before work begins in the area.</li>
+            <li>Floor hole covers must be secured so they cannot be accidentally displaced.</li>
+            <li>Label all floor hole covers clearly: "HOLE — DO NOT REMOVE".</li>
+            <li>Wall openings above 6 feet from the lower level require guardrails or a safety net.</li>
+            <li>If you remove a cover or guardrail to do work, replace it immediately when finished.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Are there any uncovered openings on today's job site? Are all covers properly labeled and secured?
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-label">Tools &amp; Equipment</div>
+
+      <!-- TALK 14 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #14</span>
+          <span class="talk-title">Electrical Safety &amp; GFCI Protection</span>
+          <span class="talk-cat">Tools &amp; Equipment</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Electrocution is one of the top four causes of construction fatalities. Temporary power on construction sites must always be protected by GFCI devices.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>All temporary power on construction sites must be protected by a Ground Fault Circuit Interrupter (GFCI).</li>
+            <li>Test GFCI devices at the start of each day before use.</li>
+            <li>Never use damaged extension cords — frayed wires and exposed conductors are immediately hazardous.</li>
+            <li>Keep cords out of water, away from sharp edges, and off the floor where they can be damaged by traffic.</li>
+            <li>Never remove the ground prong from a three-prong plug.</li>
+            <li>If a GFCI trips repeatedly, there is a fault in the circuit — do not reset and ignore it.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            Have the GFCIs been tested today? Are all extension cords in good condition?
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-label">Health &amp; Wellness</div>
+
+      <!-- TALK 15 -->
+      <div class="talk-card">
+        <div class="talk-card-header">
+          <span class="talk-num">Talk #15</span>
+          <span class="talk-title">Heat Illness Prevention</span>
+          <span class="talk-cat">Health &amp; Wellness</span>
+        </div>
+        <div class="talk-body">
+          <div class="talk-section-label">Overview</div>
+          <p class="talk-text">Working in hot environments — including poorly ventilated buildings in summer — puts workers at risk for heat cramps, heat exhaustion, and life-threatening heat stroke.</p>
+          <div class="talk-section-label">Key Points</div>
+          <ul class="talk-points">
+            <li>Drink water frequently — at least one cup every 20 minutes in hot conditions.</li>
+            <li>Take breaks in cool or shaded areas — especially in the first few days of hot weather.</li>
+            <li>Know the signs of heat exhaustion: heavy sweating, weakness, dizziness, nausea, headache.</li>
+            <li>Heat stroke is a medical emergency — hot dry skin, confusion, or loss of consciousness requires a 911 call immediately.</li>
+            <li>Watch out for co-workers — look for signs of heat illness in others and speak up.</li>
+            <li>New workers and those returning from time off need 7–14 days to acclimatize to heat.</li>
+          </ul>
+          <div class="discussion-box">
+            <div class="discussion-label">Discussion Question</div>
+            What are the temperature conditions today? Where is our cool rest area and water supply?
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" onclick="if(confirm('Clear all form data?')){document.querySelectorAll('input,textarea,select').forEach(e=>e.tagName==='SELECT'?e.selectedIndex=0:e.value='');document.getElementById('formDate').valueAsDate=new Date();document.getElementById('supSigDate').valueAsDate=new Date();}">Clear</button>
+  <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<script>
+  // Set today's date - only enhancement needed, everything else is pure HTML
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('formDate').value = today;
+    document.getElementById('supSigDate').value = today;
+  } catch(e) {}
+</script>
+
+</body>
+</html>

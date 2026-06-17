@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Herban Group – Safety Inspection</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark: #1a3a2a;
+    --green-mid: #2d6a4f;
+    --green-light: #52b788;
+    --cream: #f8f6f1;
+    --ink: #1c1c1c;
+    --muted: #6b7c74;
+    --border: #c8d6ce;
+    --red: #c0392b;
+    --amber: #d97706;
+    --field-bg: #ffffff;
+    --section-bg: #f0f4f2;
+  }
+
+  body {
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 80px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--green-dark);
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-light);
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+  }
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 5px 14px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #c2e0d0;
+    width: fit-content;
+  }
+  .score-badge strong {
+    color: white;
+    font-size: 16px;
+  }
+
+  /* META ROW */
+  .meta-bar {
+    background: var(--field-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .meta-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    background: #f7f9f8;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 16px;
+    color: var(--ink);
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--green-light);
+    box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.18);
+    background: white;
+  }
+
+  /* CHECKLIST */
+  .form-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .section {
+    background: var(--field-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .section-header {
+    background: var(--section-bg);
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* INSPECTION ITEM */
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    gap: 12px;
+    border-bottom: 1px solid #eef2f0;
+  }
+
+  .item:last-child {
+    border-bottom: none;
+  }
+
+  .item-text {
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .toggle-group {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .toggle-btn {
+    position: relative;
+  }
+
+  .toggle-btn input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-btn label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    background: #f7f9f8;
+    transition: all 0.12s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .toggle-btn.yes-btn input:checked + label {
+    background: #d1f0e0;
+    border-color: var(--green-mid);
+    color: var(--green-dark);
+  }
+
+  .toggle-btn.no-btn input:checked + label {
+    background: #fdecea;
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .toggle-btn.na-btn input:checked + label {
+    background: #f0f0f0;
+    border-color: #999;
+    color: #555;
+  }
+
+  /* item with a fail gets highlighted */
+  .item.has-fail {
+    background: #fff8f7;
+  }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 4px;
+    background: #dde9e3;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 16px 12px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--green-light);
+    border-radius: 2px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+
+  /* COMMENTS */
+  .comments-section {
+    background: var(--field-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .comments-body {
+    padding: 14px 16px;
+  }
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  /* SIGNATURE */
+  .sig-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .sig-field label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  /* ACTION BAR */
+  .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    font-family: inherit;
+  }
+
+  .btn-primary { background: var(--green-mid); color: white; }
+  .btn-secondary { background: var(--section-bg); color: var(--green-dark); border: 1.5px solid var(--border); }
+
+  /* SUMMARY PILLS */
+  .summary-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  .pill-pass { background: #d1f0e0; color: var(--green-dark); }
+  .pill-fail { background: #fdecea; color: var(--red); }
+  .pill-na   { background: #f0f0f0; color: #555; }
+  .pill-open { background: #fef3e2; color: var(--amber); }
+
+  @media print {
+    .action-bar { display: none; }
+    body { background: white; }
+    .section, .comments-section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-eyebrow">The Herban Group</span>
+  <h1 class="header-title">Safety Inspection Report</h1>
+  <div class="score-badge">
+    Score: <strong id="scoreDisplay">— / 19</strong> items answered
+  </div>
+</div>
+
+<div class="meta-bar">
+  <div class="meta-field">
+    <span class="meta-label">Job Site / Location</span>
+    <input type="text" name="jobSite" id="jobSite" placeholder="Site name or address">
+  </div>
+  <div class="meta-field">
+    <span class="meta-label">Inspection Date</span>
+    <input type="date" name="inspDate" id="inspDate">
+  </div>
+</div>
+
+<form class="form-body" id="safetyForm">
+
+  <!-- SUMMARY PILLS -->
+  <div class="summary-row" id="summaryRow" style="display:none">
+    <span class="pill pill-pass" id="pillPass">✓ 0 Pass</span>
+    <span class="pill pill-fail" id="pillFail">✗ 0 Fail</span>
+    <span class="pill pill-na" id="pillNA">N/A 0</span>
+    <span class="pill pill-open" id="pillOpen">⬜ 0 Unanswered</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar" id="progressBar" style="display:none">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <!-- PPE & EMPLOYEE SAFETY -->
+  <div class="section">
+    <div class="section-header">PPE &amp; Employee Safety</div>
+
+    <div class="item" data-item="1">
+      <span class="item-text">Are employees wearing hard hats?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn">
+          <input type="radio" name="q1" id="q1y" value="yes">
+          <label for="q1y">YES</label>
+        </div>
+        <div class="toggle-btn no-btn">
+          <input type="radio" name="q1" id="q1n" value="no">
+          <label for="q1n">NO</label>
+        </div>
+        <div class="toggle-btn na-btn">
+          <input type="radio" name="q1" id="q1na" value="na">
+          <label for="q1na">N/A</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" data-item="2">
+      <span class="item-text">Do employees have safety glasses available?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q2" id="q2y" value="yes"><label for="q2y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q2" id="q2n" value="no"><label for="q2n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q2" id="q2na" value="na"><label for="q2na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="3">
+      <span class="item-text">Are all employees aware of the emergency action plan?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q3" id="q3y" value="yes"><label for="q3y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q3" id="q3n" value="no"><label for="q3n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q3" id="q3na" value="na"><label for="q3na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="4">
+      <span class="item-text">Are all employees trained in the use of special equipment?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q4" id="q4y" value="yes"><label for="q4y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q4" id="q4n" value="no"><label for="q4n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q4" id="q4na" value="na"><label for="q4na">N/A</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE CONDITIONS -->
+  <div class="section">
+    <div class="section-header">Site Conditions</div>
+
+    <div class="item" data-item="5">
+      <span class="item-text">Are all fall protection devices in order?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q5" id="q5y" value="yes"><label for="q5y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q5" id="q5n" value="no"><label for="q5n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q5" id="q5na" value="na"><label for="q5na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="6">
+      <span class="item-text">Is the walking / working area free from trip and fall hazards?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q6" id="q6y" value="yes"><label for="q6y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q6" id="q6n" value="no"><label for="q6n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q6" id="q6na" value="na"><label for="q6na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="7">
+      <span class="item-text">Is the work area free of trash and debris?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q7" id="q7y" value="yes"><label for="q7y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q7" id="q7n" value="no"><label for="q7n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q7" id="q7na" value="na"><label for="q7na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="8">
+      <span class="item-text">Are ladders set up and used properly?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q8" id="q8y" value="yes"><label for="q8y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q8" id="q8n" value="no"><label for="q8n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q8" id="q8na" value="na"><label for="q8na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="9">
+      <span class="item-text">Are subcontractors following safety requirements?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q9" id="q9y" value="yes"><label for="q9y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q9" id="q9n" value="no"><label for="q9n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q9" id="q9na" value="na"><label for="q9na">N/A</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMERGENCY & COMPLIANCE -->
+  <div class="section">
+    <div class="section-header">Emergency Resources &amp; Compliance</div>
+
+    <div class="item" data-item="10">
+      <span class="item-text">Are first aid kits available?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q10" id="q10y" value="yes"><label for="q10y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q10" id="q10n" value="no"><label for="q10n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q10" id="q10na" value="na"><label for="q10na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="11">
+      <span class="item-text">Are fire extinguishers available in work areas?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q11" id="q11y" value="yes"><label for="q11y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q11" id="q11n" value="no"><label for="q11n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q11" id="q11na" value="na"><label for="q11na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="12">
+      <span class="item-text">Is the OSHA poster displayed?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q12" id="q12y" value="yes"><label for="q12y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q12" id="q12n" value="no"><label for="q12n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q12" id="q12na" value="na"><label for="q12na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="13">
+      <span class="item-text">Are all SDS sheets available?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q13" id="q13y" value="yes"><label for="q13y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q13" id="q13n" value="no"><label for="q13n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q13" id="q13na" value="na"><label for="q13na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="14">
+      <span class="item-text">Do all workers know where the Haz Com / SDS book is?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q14" id="q14y" value="yes"><label for="q14y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q14" id="q14n" value="no"><label for="q14n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q14" id="q14na" value="na"><label for="q14na">N/A</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS & EQUIPMENT -->
+  <div class="section">
+    <div class="section-header">Tools &amp; Equipment</div>
+
+    <div class="item" data-item="15">
+      <span class="item-text">Are all power tools maintained and in proper working order?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q15" id="q15y" value="yes"><label for="q15y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q15" id="q15n" value="no"><label for="q15n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q15" id="q15na" value="na"><label for="q15na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="16">
+      <span class="item-text">Are all hand tools free from splits and cracks?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q16" id="q16y" value="yes"><label for="q16y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q16" id="q16n" value="no"><label for="q16n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q16" id="q16na" value="na"><label for="q16na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="17">
+      <span class="item-text">Is all temporary power protected by an adequate GFCI?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q17" id="q17y" value="yes"><label for="q17y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q17" id="q17n" value="no"><label for="q17n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q17" id="q17na" value="na"><label for="q17na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="18">
+      <span class="item-text">Are extension cords in good condition?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q18" id="q18y" value="yes"><label for="q18y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q18" id="q18n" value="no"><label for="q18n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q18" id="q18na" value="na"><label for="q18na">N/A</label></div>
+      </div>
+    </div>
+
+    <div class="item" data-item="19">
+      <span class="item-text">Is the Lock Out / Tag Out program being utilized?</span>
+      <div class="toggle-group">
+        <div class="toggle-btn yes-btn"><input type="radio" name="q19" id="q19y" value="yes"><label for="q19y">YES</label></div>
+        <div class="toggle-btn no-btn"><input type="radio" name="q19" id="q19n" value="no"><label for="q19n">NO</label></div>
+        <div class="toggle-btn na-btn"><input type="radio" name="q19" id="q19na" value="na"><label for="q19na">N/A</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADDITIONAL COMMENTS -->
+  <div class="comments-section">
+    <div class="section-header">Additional Comments</div>
+    <div class="comments-body">
+      <textarea name="comments" placeholder="Note any additional observations, hazards, or follow-up items…"></textarea>
+    </div>
+  </div>
+
+  <!-- SIGNATURE -->
+  <div class="section">
+    <div class="section-header">Inspector Signature</div>
+    <div class="sig-row">
+      <div class="sig-field">
+        <label>Inspector Name</label>
+        <input type="text" name="inspector" placeholder="Print full name">
+      </div>
+      <div class="sig-field">
+        <label>Date</label>
+        <input type="date" name="sigDate" id="sigDate">
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" type="button" onclick="clearForm()">Clear</button>
+  <button class="btn btn-primary" type="button" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<script>
+  const TOTAL = 19;
+
+  // Set today's date
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('inspDate').value = today;
+  document.getElementById('sigDate').value = today;
+
+  function updateStats() {
+    let yes = 0, no = 0, na = 0, answered = 0;
+    for (let i = 1; i <= TOTAL; i++) {
+      const val = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+      if (val === 'yes') { yes++; answered++; }
+      else if (val === 'no') { no++; answered++; }
+      else if (val === 'na') { na++; answered++; }
+    }
+    const open = TOTAL - answered;
+
+    // Score badge
+    document.getElementById('scoreDisplay').textContent = `${answered} / ${TOTAL}`;
+
+    // Show summary row + progress bar after first interaction
+    if (answered > 0) {
+      document.getElementById('summaryRow').style.display = 'flex';
+      document.getElementById('progressBar').style.display = 'block';
+    }
+
+    // Pills
+    document.getElementById('pillPass').textContent = `✓ ${yes} Pass`;
+    document.getElementById('pillFail').textContent = `✗ ${no} Fail`;
+    document.getElementById('pillNA').textContent = `N/A ${na}`;
+    document.getElementById('pillOpen').textContent = `⬜ ${open} Unanswered`;
+    document.getElementById('pillFail').style.display = no > 0 ? 'inline' : 'none';
+
+    // Progress
+    const pct = (answered / TOTAL) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    // Highlight fail rows
+    for (let i = 1; i <= TOTAL; i++) {
+      const row = document.querySelector(`[data-item="${i}"]`);
+      const val = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+      if (row) row.classList.toggle('has-fail', val === 'no');
+    }
+  }
+
+  // Listen to all radio changes
+  document.querySelectorAll('input[type="radio"]').forEach(r => {
+    r.addEventListener('change', updateStats);
+  });
+
+  function clearForm() {
+    if (confirm('Clear all inspection answers?')) {
+      document.getElementById('safetyForm').reset();
+      document.getElementById('summaryRow').style.display = 'none';
+      document.getElementById('progressBar').style.display = 'none';
+      document.getElementById('scoreDisplay').textContent = '— / 19';
+      document.querySelectorAll('.item').forEach(i => i.classList.remove('has-fail'));
+    }
+  }
+
+  // Initialize
+  updateStats();
+</script>
+</body>
+</html>
